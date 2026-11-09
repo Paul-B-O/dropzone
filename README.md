@@ -18,6 +18,40 @@ Plateforme de **drops** de sneakers en édition limitée : un drop met en vente 
 | API (`backend/`) | Python 3.12, FastAPI, SQLAlchemy 2, SQLite en local ou PostgreSQL, pytest, Ruff |
 | Front (`frontend/`) | React 19, Vite, TypeScript, ESLint, Vitest + Testing Library, Playwright |
 
+## Lancer avec Docker (recommandé)
+
+Prérequis : Docker avec Docker Compose. Rien d'autre à installer.
+
+```bash
+cp .env.example .env          # puis adapter les valeurs si besoin
+docker compose up -d --build  # construit les images et lance la stack
+```
+
+| Service | Rôle | Adresse |
+|---|---|---|
+| `front` | front React servi par nginx | <http://localhost:8080> |
+| `api` | API FastAPI | <http://localhost:8000> (santé : <http://localhost:8000/health/ready>) |
+| `db` | base PostgreSQL 16, données dans le volume `db-data` | réseau interne uniquement |
+
+Commandes utiles :
+
+```bash
+docker compose ps             # état des services (db doit être "healthy")
+docker compose logs -f api    # logs de l'API
+docker compose down           # arrête la stack, les données sont conservées
+docker compose down -v        # arrête la stack et supprime les données
+```
+
+Variables du fichier `.env` (voir `.env.example`) :
+
+| Variable | Rôle |
+|---|---|
+| `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` | identifiants de la base, utilisés aussi pour construire `DATABASE_URL` |
+| `LOG_LEVEL` | niveau des logs de l'API |
+| `SEED_DEMO_DATA` | insérer les données de démo si la base est vide |
+
+Le fichier `.env` n'est jamais commité.
+
 ## Lancer le projet en local (sans Docker)
 
 Prérequis : Git, Python 3.12 ou plus récent, Node.js 22.12 ou plus récent.
@@ -101,14 +135,18 @@ La configuration passe par des variables d'environnement (ou un fichier `backend
 
 ```text
 .
+├── compose.yml              stack Docker Compose (db, api, front)
+├── .env.example             variables d'environnement à copier dans .env
 ├── backend/                 API FastAPI
 │   ├── app/                 code (routes, services, domaine, modèles)
 │   ├── tests/               tests pytest (SQLite en mémoire)
+│   ├── Dockerfile           image de l'API (multi-stage, non-root)
 │   ├── pyproject.toml       configuration Ruff et pytest
 │   └── requirements*.txt    dépendances épinglées
 └── frontend/                application React
     ├── src/                 composants, pages et tests Vitest
     ├── e2e/                 tests Playwright
+    ├── Dockerfile           image du front (build Node, puis nginx)
     ├── nginx.conf           configuration nginx pour servir le front dans un conteneur
     └── playwright.config.ts
 ```
