@@ -113,15 +113,12 @@ La configuration passe par des variables d'environnement (ou un fichier `backend
     └── playwright.config.ts
 ```
 
-## Ce qu'il reste à faire
+## Contribuer
 
-Le détail des consignes est dans la fiche **« TP DropZone »**. En résumé :
+La branche `main` est protégée : tout changement passe par une branche et une pull request.
+Les règles (nom des branches, format des commits, étapes d'une PR) sont dans [CONTRIBUTING.md](CONTRIBUTING.md).
 
-1. Remettre le dépôt d'aplomb : README, branche `main` protégée, Conventional Commits, première version taguée.
-2. Conteneuriser : images Docker de l'API et du front, `compose.yml` avec PostgreSQL, `.env.example`.
-3. Intégration continue : workflow GitHub Actions (lint, tests, E2E), tests manquants, badge.
-4. Déploiement continu : images publiées sur ghcr.io, front sur GitHub Pages, release à chaque tag.
-5. Observer : health checks Docker, logs structurés, métriques `/metrics`, supervision avec Uptime Kuma.
+L'état du dépôt au début du TP est décrit dans [AUDIT.md](AUDIT.md).
 
 ## Licence
 
