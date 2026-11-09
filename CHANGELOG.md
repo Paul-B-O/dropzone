@@ -18,3 +18,4 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), versions : [s
 - `AUDIT.md` : audit du dépôt de départ.
 - `CONTRIBUTING.md` : nommage des branches, format des commits, étapes d'une pull request.
 - Protection de la branche `main` : pull request obligatoire.
+- 
